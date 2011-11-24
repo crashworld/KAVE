@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Main!</string>
     <string name="app_name">Twitter</string>
     <string name="no_tweets">No Tweets</string>
+    <string name="can_t_start_auth">Can\'t start authorization</string>
+    <string name="internet_connection_required">Internet connection required</string>
+    <string name="authorization_failed">Authorization failed</string>
+    <string name="error">Error</string>
+    <string-array name="menu_categories">
+        <item >Accounts</item>
+        <item >Searches</item>
+        <item >Trends</item>
+    </string-array>
+    <string name="add_search">Add Search</string>
+    <string name="add_new">Add new</string>
 </resources>

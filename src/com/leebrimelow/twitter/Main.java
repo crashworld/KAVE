@@ -36,7 +36,7 @@ public class Main extends ExpandableListActivity{
 		case 0:
 			switch(childPosition){
 			case 0:
-				startActivity(new Intent(this,MainActivity.class));
+				startActivity(new Intent(this, AuthActivity.class));
 			case 1:
 
 			default:
