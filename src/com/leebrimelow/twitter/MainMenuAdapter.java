@@ -46,7 +46,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		case 0:
 			switch(arg1){
 			case 0:
-				return R.string.add_new;
+				return mContext.getResources().getString(R.string.add_new);
 			default:
 			/*	if(arg1 < 2 + mAccontCursor.getCount())
 				{
@@ -59,7 +59,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		case 1:
 			switch(arg1){
 			case 0:
-				return R.string.add_search;
+				return mContext.getResources().getString(R.string.add_search);
 			default:
 		/*		if(arg1 < 1 + mSearchCursor.getCount())
 				{
@@ -89,8 +89,10 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	public View getChildView(int arg0, int arg1, boolean arg2, View arg3,
 			ViewGroup arg4) {
 		// TODO Auto-generated method stub
-		View view = inflater.inflate(R.layout.main_menu_item, null);		
-		((TextView) view.findViewById(R.id.text)).setText((String) getChild(arg0, arg1));
+		View view = inflater.inflate(R.layout.main_menu_item, null);
+		
+		TextView textView = (TextView) view.findViewById(R.id.text);
+		textView.setText((String) getChild(arg0, arg1));
 		return view;
 	}
 
