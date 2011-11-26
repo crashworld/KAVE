@@ -14,10 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainMenuAdapter implements ExpandableListAdapter {
-
-	
 	private static final int GROUP_COUNT = 3;
-	private static final String mGroupTitle[] = {"Accounts","Searchers","Trends"}; 
+	private static String mGroupTitle[];
 	private static Context mContext;
 	private static LayoutInflater inflater;
 	private static Cursor mAccontCursor, mSearchCursor, mTrendCursor;
@@ -27,6 +25,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		// TODO Auto-generated constructor stub
 		mContext = context;
 		inflater = LayoutInflater.from(mContext);
+		mGroupTitle = mContext.getResources().getStringArray(R.array.menu_categories);
 		/* Выборка из бд с помощью хелпера курсор Акаунтов, Поисков, Трендов;
 		mTwitterSQLiteOpenHelpet = SQLiteOpenHelper.getInstance;
 		mAccontCursor = mTwitterSQLiteOpenHelpet.getReadableDatabase().rawQuery("SELCT * FROM accounts", null);
@@ -47,9 +46,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		case 0:
 			switch(arg1){
 			case 0:
-				return "Create New Account";
-			case 1:
-				return "Add Existing Account";
+				return mContext.getResources().getString(R.string.add_new);
 			default:
 			/*	if(arg1 < 2 + mAccontCursor.getCount())
 				{
@@ -62,7 +59,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		case 1:
 			switch(arg1){
 			case 0:
-				return "Add Search";
+				return mContext.getResources().getString(R.string.add_search);
 			default:
 		/*		if(arg1 < 1 + mSearchCursor.getCount())
 				{
@@ -92,8 +89,10 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	public View getChildView(int arg0, int arg1, boolean arg2, View arg3,
 			ViewGroup arg4) {
 		// TODO Auto-generated method stub
-		View view = inflater.inflate(R.layout.main_menu_item, null);		
-		((TextView) view.findViewById(R.id.text)).setText((String) getChild(arg0, arg1));
+		View view = inflater.inflate(R.layout.main_menu_item, null);
+		
+		TextView textView = (TextView) view.findViewById(R.id.text);
+		textView.setText((String) getChild(arg0, arg1));
 		return view;
 	}
 
@@ -102,7 +101,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		switch(arg0){
 		
 		case 0:
-			return 2; //+ mAccontCursor.getCount();
+			return 1; //+ mAccontCursor.getCount();
 		case 1:
 			return 1; // + mSearchCursor.getCount();
 		case 2:
