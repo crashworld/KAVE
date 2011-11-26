@@ -98,7 +98,7 @@ public class AuthActivity extends Activity{
 		super.onResume();
 		ahc = AndroidHttpClient.newInstance(USER_AGENT);		
 		HttpUriRequest acquireRequestToken = new HttpPost(REQUEST_TOKEN_ENDPOINT);
-		OAuthHeader oauth = new OAuthHeader(AuthActivity.this, REQUEST_TOKEN_ENDPOINT, CALLBACK_URL, "POST");
+		OAuthHeader oauth = new OAuthHeader(REQUEST_TOKEN_ENDPOINT, CALLBACK_URL, "POST");
 		Properties p = new Properties();
 		
 		try {

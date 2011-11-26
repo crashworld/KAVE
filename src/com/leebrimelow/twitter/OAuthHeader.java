@@ -19,7 +19,6 @@ import org.apache.http.HeaderElement;
 import org.apache.http.ParseException;
 import org.apache.http.message.BasicHeaderElement;
 
-import android.content.Context;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
@@ -31,18 +30,20 @@ public class OAuthHeader implements Header {
 	private final String SIG_ALGO = "HMAC-SHA1";
 	private final String OAUTH_VER = "1.0";
 	private Map<String, String> hdr = new TreeMap<String, String>();
-	private String consumerSecret;
+	private String consumerSecret = "";
 	
 	public void setConsumerKey(String consumerKey) {
 		hdr.put("oauth_consumer_key", consumerKey);
+		if (!consumerSecret.equals(""))
+			hdr.put("oauth_signature", makeSignature(makeSignatureBaseString()));
 	}
 	
 	public void setConsumerSecret(String consumerSecret) {
 		this.consumerSecret = consumerSecret;
+		hdr.put("oauth_signature", makeSignature(makeSignatureBaseString()));
 	}
 	
-	public OAuthHeader(Context c, String url, String callbackUrl,
-			String http_meth) {
+	public OAuthHeader(String url, String callbackUrl, String http_meth) {
 		try {
 			this.httpMeth = http_meth;
 			this.url = url;
@@ -58,9 +59,6 @@ public class OAuthHeader implements Header {
 			hdr.put("oauth_nonce", nonce);
 			hdr.put("oauth_timestamp",
 					String.valueOf(System.currentTimeMillis() / 1000));
-			String sig_base = makeSignatureBaseString();
-			String signature = makeSignature(sig_base);
-			hdr.put("oauth_signature", signature);
 		} catch (Exception e) {
 			return;
 		}
