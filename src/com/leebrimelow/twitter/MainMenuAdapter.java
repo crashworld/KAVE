@@ -34,6 +34,10 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		*/
 		
 	}
+	public int getAccountId(int groupPosition, int childPosition){
+		
+		return 0;
+	}
 	
 	public boolean areAllItemsEnabled() {
 		// TODO Auto-generated method stub
@@ -89,11 +93,12 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	public View getChildView(int arg0, int arg1, boolean arg2, View arg3,
 			ViewGroup arg4) {
 		// TODO Auto-generated method stub
-		View view = inflater.inflate(R.layout.main_menu_item, null);
+		if (arg3 == null) {
+			arg3 = newChildView(arg0, arg1, getChildId(arg0, arg1), arg4);
+		}
+		bindChildView(arg0, arg1, getChildId(arg0, arg1), arg3);
 		
-		TextView textView = (TextView) view.findViewById(R.id.text);
-		textView.setText((String) getChild(arg0, arg1));
-		return view;
+		return arg3;
 	}
 
 	public int getChildrenCount(int arg0) {
@@ -101,7 +106,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		switch(arg0){
 		
 		case 0:
-			return 1; //+ mAccontCursor.getCount();
+			return 2; //+ mAccontCursor.getCount();
 		case 1:
 			return 1; // + mSearchCursor.getCount();
 		case 2:
@@ -181,17 +186,17 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 
 	}
 
-	private View newView(int postion, ViewGroup parent) {
+	private View newChildView(int groupPosition, int childPosition, long id, ViewGroup parent) {
 		View view = inflater.inflate(R.layout.main_menu_item, parent, false);
 		ViewHolder holder = getHolder(view);
 		view.setTag(holder);
 		return view;
 	}
 	
-	private void bindView(int position, View conveView) {
+	private void bindChildView(int groupPosition, int childPosition, long id, View conveView) {
 		ViewHolder holder = (ViewHolder) conveView.getTag();
 		holder.textView.setText("");
-		holder.imageView.setImageBitmap(getImage(position));
+		holder.imageView.setImageBitmap(getImage(id));
 	}
 	
 	private ViewHolder getHolder(View view) {
@@ -201,7 +206,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		return holder;
 	}
 		
-	private Bitmap getImage(int id){
+	private Bitmap getImage(long id){
 		
 		return null;		
 	}

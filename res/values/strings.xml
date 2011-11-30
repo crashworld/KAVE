@@ -13,4 +13,9 @@
     </string-array>
     <string name="add_search">Add Search</string>
     <string name="add_new">Add new</string>
+    <string name="refresh_twitts">Refresh Tweets</string>
+    <string name="friends">Friends</string>
+    <string name="about_myself">About Myself</string>
+    <string name="filters">Filters</string>
+    <string name="settings">Settings</string>
 </resources>

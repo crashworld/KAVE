@@ -4,9 +4,7 @@ import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class Main extends ExpandableListActivity{
     /** Called when the activity is first created. */
@@ -40,7 +38,11 @@ public class Main extends ExpandableListActivity{
 			case 1:
 
 			default:
-				
+				// получаем id текущего акаунта 
+				int accountId = mAdapter.getAccountId(groupPosition,childPosition);
+					
+				Intent intent = new Intent(this, MainActivity.class);
+				intent.putExtra("account_id", accountId);
 			}
 		case 1:
 			switch(childPosition){

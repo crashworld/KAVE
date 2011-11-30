@@ -160,7 +160,7 @@ public class AuthActivity extends Activity{
 				}
 			}
 		};
-		t.execute(acquireRequestToken);	
+		t.execute(acquireRequestToken);
 	}
 	
 	@Override

@@ -16,9 +16,31 @@
             </intent-filter>
         </activity>
 		<activity android:name=".MainActivity"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN_ACTIVITY" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Twitts_Activity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.LAST_TWITTS" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Friends_Twitts_Activity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.FRIENDS" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".User_Timeline_Activity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_TIMELINE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
