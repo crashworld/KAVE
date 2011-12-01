@@ -106,7 +106,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		switch(arg0){
 		
 		case 0:
-			return 2; //+ mAccontCursor.getCount();
+			return 1; //+ mAccontCursor.getCount();
 		case 1:
 			return 1; // + mSearchCursor.getCount();
 		case 2:
