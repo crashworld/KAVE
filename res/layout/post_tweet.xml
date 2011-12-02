@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignBaseline="@+id/post_button" android:layout_alignBottom="@+id/post_button" android:layout_alignParentRight="true" android:layout_marginRight="20dp" android:id="@+id/char_counter" android:text="140"></TextView>
+    <EditText android:id="@+id/tweet_content" android:inputType="textMultiLine" android:layout_width="match_parent" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_marginTop="14dp" android:layout_height="50pt"></EditText>
+    <Button android:text="@string/post_button" android:id="@+id/post_button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/tweet_content" android:layout_alignParentLeft="true" android:layout_marginLeft="96dp"></Button>
+    
+</RelativeLayout>

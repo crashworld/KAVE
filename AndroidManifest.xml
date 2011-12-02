@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <service android:name=".Twitter_Loader_Poster_Service"/>
         <activity android:name="com.leebrimelow.twitter.AuthActivity"/>
+        
         <activity android:name=".Main"
                   android:label="@string/app_name">
             <intent-filter>
@@ -23,14 +25,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Twitts_Activity"
+              <activity android:name=".Tweets_Activity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.LAST_TWITTS" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Friends_Twitts_Activity"
+        <activity android:name=".Friends_Tweets_Activity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.FRIENDS" />
@@ -41,6 +43,13 @@
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.USER_TIMELINE" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Post_Tweet_Activity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.POST_TWEET_ACTIVITY" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
