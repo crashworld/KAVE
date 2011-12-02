@@ -18,32 +18,28 @@ public final class R {
     }
     public static final class id {
         public static final int authWebView=0x7f080000;
-        public static final int char_counter=0x7f080007;
         public static final int current_account=0x7f080002;
         public static final int image=0x7f080004;
         public static final int next_account=0x7f080003;
-        public static final int post_button=0x7f080006;
         public static final int previous_account=0x7f080001;
-        public static final int status_text=0x7f08000b;
-        public static final int status_user_name_text=0x7f08000a;
+        public static final int status_text=0x7f080008;
+        public static final int status_user_name_text=0x7f080007;
         public static final int text=0x7f080005;
-        public static final int tweet_content=0x7f080008;
-        public static final int tweets_activity_menu_item1=0x7f08000c;
-        public static final int tweets_activity_menu_item2=0x7f08000d;
-        public static final int tweets_activity_menu_item3=0x7f08000e;
-        public static final int tweets_activity_menu_item4=0x7f08000f;
-        public static final int tweets_activity_menu_item5=0x7f080010;
-        public static final int user_avatar=0x7f080009;
+        public static final int twitts_activity_menu_item1=0x7f080009;
+        public static final int twitts_activity_menu_item2=0x7f08000a;
+        public static final int twitts_activity_menu_item3=0x7f08000b;
+        public static final int twitts_activity_menu_item4=0x7f08000c;
+        public static final int twitts_activity_menu_item5=0x7f08000d;
+        public static final int user_avatar=0x7f080006;
     }
     public static final class layout {
         public static final int auth=0x7f030000;
         public static final int main=0x7f030001;
         public static final int main_menu_item=0x7f030002;
-        public static final int post_tweet=0x7f030003;
-        public static final int status_list_item=0x7f030004;
+        public static final int status_list_item=0x7f030003;
     }
     public static final class menu {
-        public static final int tweets_activity_menu=0x7f070000;
+        public static final int twitts_activity_menu=0x7f070000;
     }
     public static final class raw {
         public static final int oauth=0x7f040000;
@@ -51,7 +47,6 @@ public final class R {
     public static final class string {
         public static final int about_myself=0x7f05000a;
         public static final int add_new=0x7f050007;
-        public static final int add_new_tweet=0x7f05000d;
         public static final int add_search=0x7f050006;
         public static final int app_name=0x7f050000;
         public static final int authorization_failed=0x7f050004;
@@ -61,12 +56,7 @@ public final class R {
         public static final int friends=0x7f050009;
         public static final int internet_connection_required=0x7f050003;
         public static final int no_tweets=0x7f050001;
-        public static final int post_button=0x7f05000e;
-        public static final int refresh_tweets=0x7f050008;
+        public static final int refresh_twitts=0x7f050008;
         public static final int settings=0x7f05000c;
-        public static final int toast_empty_status_text=0x7f050010;
-        public static final int toast_posted_tweet_successfully=0x7f050011;
-        public static final int toast_posted_tweet_unsuccessful=0x7f050012;
-        public static final int toast_too_many_chars=0x7f05000f;
     }
 }
