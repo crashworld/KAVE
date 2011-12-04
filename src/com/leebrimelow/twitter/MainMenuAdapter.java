@@ -1,6 +1,7 @@
 package com.leebrimelow.twitter;
 
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -19,24 +20,42 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	private static Context mContext;
 	private static LayoutInflater inflater;
 	private static Cursor mAccontCursor, mSearchCursor, mTrendCursor;
-	private static SQLiteOpenHelper mTwitterSQLiteOpenHelpet;
+	private static boolean isAccountCursor, isSearchCursor, isTrendCursor;
+	private static ContentResolver mContentResolver;
 	
 	public MainMenuAdapter(Context context) {
 		// TODO Auto-generated constructor stub
 		mContext = context;
 		inflater = LayoutInflater.from(mContext);
 		mGroupTitle = mContext.getResources().getStringArray(R.array.menu_categories);
-		/* Выборка из бд с помощью хелпера курсор Акаунтов, Поисков, Трендов;
-		mTwitterSQLiteOpenHelpet = SQLiteOpenHelper.getInstance;
-		mAccontCursor = mTwitterSQLiteOpenHelpet.getReadableDatabase().rawQuery("SELCT * FROM accounts", null);
-		mTrendCursor = mTwitterSQLiteOpenHelpet.getReadableDatabase().rawQuery("SELCT * FROM trends", null);
-		mSearchCursor = mTwitterSQLiteOpenHelpet.getReadableDatabase().rawQuery("SELCT * FROM searches", null);
-		*/
+		mContentResolver = context.getContentResolver();
+		
+		
+		// подгрузка данных из бд
+		getData();
+		
 		
 	}
+	
+		// Выборка из бд с помощью контент провайдера курсоров Акаунтов, Поисков, Трендов;
+	private void getData(){
+		mAccontCursor = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_AACCOUNTS, null, null, null, null);
+		if(mAccontCursor.moveToFirst())
+			isAccountCursor = true;
+		mTrendCursor = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_TRENDS, null, null, null, null);
+		if(mTrendCursor.moveToFirst())
+			isTrendCursor = true;
+		mSearchCursor = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_SEARCHES, null, null, null, null);
+		if(mSearchCursor.moveToFirst())
+			isSearchCursor = true;
+	}
 	public int getAccountId(int groupPosition, int childPosition){
-		
-		return 0;
+		if((isAccountCursor) && (groupPosition == 0)){
+			mAccontCursor.moveToPosition(childPosition);
+			return mAccontCursor.getInt(mAccontCursor.getColumnIndex("account_id"));
+		}
+		else
+			return 0;
 	}
 	
 	public boolean areAllItemsEnabled() {
@@ -52,34 +71,44 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 			case 0:
 				return mContext.getResources().getString(R.string.add_new);
 			default:
-			/*	if(arg1 < 2 + mAccontCursor.getCount())
-				{
-					mAccontCursor.moveToPosition(arg1-1);
-					return mAccontCursor.getString(mAccontCursor.getColumnIndex("Login"));
-				}
-				else*/
+				if (isAccountCursor){
+					if(arg1 < 2 + mAccontCursor.getCount())
+					{
+						mAccontCursor.moveToPosition(arg1);
+						return mAccontCursor.getString(mAccontCursor.getColumnIndex("screen_name"));
+					}else
+						return null;
+				}else
 					return null;
+				
 			}
 		case 1:
 			switch(arg1){
 			case 0:
 				return mContext.getResources().getString(R.string.add_search);
 			default:
-		/*		if(arg1 < 1 + mSearchCursor.getCount())
-				{
-					mSearchCursor.moveToPosition(arg1);
-					return mSearchCursor.getString(mSearchCursor.getColumnIndex("SearchTitle"));
-				}
-				else
-			*/		return null;									
+				if(isSearchCursor){
+					if(arg1 < 1 + mSearchCursor.getCount())
+					{
+						mSearchCursor.moveToPosition(arg1);
+						return mSearchCursor.getString(mSearchCursor.getColumnIndex("search_title"));
+					}
+					else
+						return null;	
+				}else
+					return null;
 			}			
 		case 2:
-		/*	if(arg1 < mTrendCursor.getCount())
-			{
-				mTrendCursor.moveToPosition(arg1+1);
-				return mTrendCursor.getString(mTrendCursor.getColumnIndex("TrendTitle"));
-			}*/
-			return null;
+			if(isTrendCursor){
+				if(arg1 < mTrendCursor.getCount())
+				{
+					mTrendCursor.moveToPosition(arg1+1);
+					return mTrendCursor.getString(mTrendCursor.getColumnIndex("trend_title"));
+				}
+				else
+					return null;
+			}else
+				return null;
 		default:
 			return null;
 		}
@@ -103,14 +132,20 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 
 	public int getChildrenCount(int arg0) {
 		// TODO Auto-generated method stub
-		switch(arg0){
-		
+		int count = 0;
+		switch(arg0){		
 		case 0:
-			return 1; //+ mAccontCursor.getCount();
+			if(isAccountCursor)
+				count = mAccontCursor.getCount();
+			return 1 + count;
 		case 1:
-			return 1; // + mSearchCursor.getCount();
+			if(isSearchCursor)
+				count = + mSearchCursor.getCount();
+			return 1 + count;
 		case 2:
-			return 0;//mTrendCursor.getCount();
+			if(isTrendCursor)
+				count = mTrendCursor.getCount();
+			return count;
 		default:
 			return 0;
 		}
@@ -195,7 +230,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	
 	private void bindChildView(int groupPosition, int childPosition, long id, View conveView) {
 		ViewHolder holder = (ViewHolder) conveView.getTag();
-		holder.textView.setText("");
+		holder.textView.setText((String) getChild(groupPosition, childPosition));
 		holder.imageView.setImageBitmap(getImage(id));
 	}
 	
