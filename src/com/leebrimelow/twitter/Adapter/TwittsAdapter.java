@@ -1,4 +1,4 @@
-package com.leebrimelow.twitter;
+package com.leebrimelow.twitter.Adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
+
+import com.leebrimelow.twitter.R;
 
 import twitter4j.Status;
 import twitter4j.User;
@@ -20,28 +22,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-public class TweetsAdapter extends BaseAdapter {
+public class TwittsAdapter extends BaseAdapter {
 
 	private int accountId;
 	
 	private static Context mContext;
 	private static LayoutInflater inflater;
-	private Cursor oldTweets; 
-	private ArrayList<Status> newTweets;
+	private Cursor oldTwitts; 
+	private ArrayList<Status> newTwitts;
 	private SQLiteOpenHelper mTwitterSQLiteOpenHelper;
 	private long lastTwittId;
 	
-	public TweetsAdapter(Context context, int acId) {
+	public TwittsAdapter(Context context, int acId) {
 		// TODO Auto-generated constructor stub
 		mContext = context;
 		accountId = acId;
 		inflater = LayoutInflater.from(mContext);
-		newTweets = new ArrayList<Status>();
+		newTwitts = new ArrayList<Status>();
 		//mTwitterSQLiteOpenHelper = SQLiteOpenHelper().getInstace();
-		oldTweets = mTwitterSQLiteOpenHelper.getReadableDatabase().rawQuery("SELECT json_status FROM json_status WHERE id=? ORDER BY date", new String[]{String.valueOf(accountId)});
-		oldTweets.moveToLast();
+		oldTwitts = mTwitterSQLiteOpenHelper.getReadableDatabase().rawQuery("SELECT json_status FROM json_status WHERE id=? ORDER BY date", new String[]{String.valueOf(accountId)});
+		oldTwitts.moveToLast();
 		try {
-			lastTwittId = ((Status) new JSONObject(oldTweets.getString(oldTweets.getColumnIndex("json_status")))).getId();
+			lastTwittId = ((Status) new JSONObject(oldTwitts.getString(oldTwitts.getColumnIndex("json_status")))).getId();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,33 +61,33 @@ public class TweetsAdapter extends BaseAdapter {
 	public int getCount() {
 		// TODO Auto-generated method stub
 		int count = 0;
-		if (newTweets != null)
-			count += newTweets.size();
-		if (oldTweets.moveToFirst())
-			count += oldTweets.getCount();
+		if (newTwitts != null)
+			count += newTwitts.size();
+		if (oldTwitts.moveToFirst())
+			count += oldTwitts.getCount();
 		return count;
 	}
 	
-	public void addNewTweets(ArrayList<Status> arrayList){
+	public void addNewTwitts(ArrayList<Status> arrayList){
 		if (arrayList.size() > 0){
 			lastTwittId = arrayList.get(0).getId();
-			newTweets.add(0,(Status) arrayList);
+			newTwitts.add(0,(Status) arrayList);
 			notifyDataSetChanged();
 		}		
 	}
 
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		if ((newTweets != null) && (oldTweets.moveToFirst())){
+		if ((newTwitts != null) && (oldTwitts.moveToFirst())){
 			
-			if(arg0 < newTweets.size())
-				return newTweets.get(arg0);
+			if(arg0 < newTwitts.size())
+				return newTwitts.get(arg0);
 			
 			else if (arg0 < getCount()){
 				
-				oldTweets.moveToPosition(arg0 - newTweets.size());
+				oldTwitts.moveToPosition(arg0 - newTwitts.size());
 				try {
-					Status status = (Status) new JSONObject(oldTweets.getString(oldTweets.getColumnIndex("json_string")));
+					Status status = (Status) new JSONObject(oldTwitts.getString(oldTwitts.getColumnIndex("json_string")));
 					return status;
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -96,13 +98,13 @@ public class TweetsAdapter extends BaseAdapter {
 			}else
 				return null;
 			
-		}else if(oldTweets.moveToFirst()){
+		}else if(oldTwitts.moveToFirst()){
 			
-			if (arg0 < oldTweets.getCount()){
+			if (arg0 < oldTwitts.getCount()){
 				
-				oldTweets.moveToPosition(arg0);
+				oldTwitts.moveToPosition(arg0);
 				try {
-					Status status = (Status) new JSONObject(oldTweets.getString(oldTweets.getColumnIndex("json_string")));
+					Status status = (Status) new JSONObject(oldTwitts.getString(oldTwitts.getColumnIndex("json_string")));
 					return status;
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -113,8 +115,8 @@ public class TweetsAdapter extends BaseAdapter {
 			}else
 				return null;
 			
-		}else if(arg0 < newTweets.size())			
-			return newTweets.get(arg0);
+		}else if(arg0 < newTwitts.size())			
+			return newTwitts.get(arg0);
 			
 		else
 			return null;

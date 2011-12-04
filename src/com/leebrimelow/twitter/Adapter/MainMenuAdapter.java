@@ -1,5 +1,8 @@
-package com.leebrimelow.twitter;
+package com.leebrimelow.twitter.Adapter;
 
+
+import com.leebrimelow.twitter.R;
+import com.leebrimelow.twitter.Provider.KAVE_Content_Provider;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -14,6 +17,7 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 public class MainMenuAdapter implements ExpandableListAdapter {
 	private static final int GROUP_COUNT = 3;
 	private static String mGroupTitle[];
@@ -22,6 +26,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	private static Cursor mAccontCursor, mSearchCursor, mTrendCursor;
 	private static boolean isAccountCursor, isSearchCursor, isTrendCursor;
 	private static ContentResolver mContentResolver;
+	
 	
 	public MainMenuAdapter(Context context) {
 		// TODO Auto-generated constructor stub
@@ -32,7 +37,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		
 		
 		// подгрузка данных из бд
-		getData();
+//		getData();
 		
 		
 	}
@@ -145,6 +150,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		case 2:
 			if(isTrendCursor)
 				count = mTrendCursor.getCount();
+			
 			return count;
 		default:
 			return 0;

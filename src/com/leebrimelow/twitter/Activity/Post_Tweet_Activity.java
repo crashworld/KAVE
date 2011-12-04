@@ -1,11 +1,11 @@
-package com.leebrimelow.twitter;
+package com.leebrimelow.twitter.Activity;
 
-import com.leebrimelow.twitter.Twitter_Loader_Poster_Service.LocalBinder;
+import com.leebrimelow.twitter.R;
+import com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service;
+import com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service.LocalBinder;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,7 +19,6 @@ import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class Post_Tweet_Activity extends Activity {

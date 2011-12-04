@@ -1,14 +1,11 @@
-package com.leebrimelow.twitter;
+package com.leebrimelow.twitter.Activity;
 
-import java.util.ArrayList;
 
-import com.leebrimelow.twitter.Twitter_Loader_Poster_Service.LocalBinder;
+import com.leebrimelow.twitter.R;
+import com.leebrimelow.twitter.Adapter.TwittsAdapter;
+import com.leebrimelow.twitter.Service.Twitter_Loader_Service;
+import com.leebrimelow.twitter.Service.Twitter_Loader_Service.LocalBinder;
 
-import twitter4j.Paging;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
 import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,11 +17,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class Tweets_Activity extends ListActivity {
+public class Twitts_Activity extends ListActivity {
 
-	private TweetsAdapter mAdapter;
+	private TwittsAdapter mAdapter;
 	private int accountId;
-	private Twitter_Loader_Poster_Service mService;
+	private Twitter_Loader_Service mService;
 	private boolean mBound;
 	
 	@Override
@@ -38,18 +35,16 @@ public class Tweets_Activity extends ListActivity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		 // Bind to LocalService        
-		mAdapter = new TweetsAdapter(this, accountId);
-		Intent intent = new Intent(this, Twitter_Loader_Poster_Service.class);
+		 // Bind to LocalService
+        Intent intent = new Intent(this, Twitter_Loader_Service.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-       
 	}
 	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		loadTweets();
+		loadTwitts();
 	}
 	
 	 @Override
@@ -62,16 +57,16 @@ public class Tweets_Activity extends ListActivity {
 	        }
 	    }
 	
-	private void downloadNewTweets(){
+	private void downloadNewTwitts(){
 		if (mBound)
-			if(mService.downloadNewTweets() != null)
-				mAdapter.addNewTweets(mService.downloadNewTweets());
+			if(mService.downloadNewTwitts() != null)
+				mAdapter.addNewTwitts(mService.downloadNewTwitts());
 	}
 	
 	
-	private void loadTweets(){
+	private void loadTwitts(){
 		if(mAdapter == null){
-				mAdapter = new TweetsAdapter(this, accountId);
+				mAdapter = new TwittsAdapter(this, accountId);
 				setListAdapter(mAdapter);
 		}
 		
@@ -84,12 +79,6 @@ public class Tweets_Activity extends ListActivity {
 	    inflater.inflate(R.menu.tweets_activity_menu, menu);
 	    return true;
 	}
-	
-	private void addNewTweet(){
-		
-		
-	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
@@ -97,10 +86,9 @@ public class Tweets_Activity extends ListActivity {
 		switch (item.getItemId())
 		{
 		case R.id.tweets_activity_menu_item1:
-			downloadNewTweets();
+			downloadNewTwitts();
 			return true;
 		case R.id.tweets_activity_menu_item2:
-			addNewTweet();
 			return true;
 		case R.id.tweets_activity_menu_item3:
 			return true;
@@ -120,11 +108,7 @@ public class Tweets_Activity extends ListActivity {
 				LocalBinder binder = (LocalBinder) service;
 	            mService = binder.getService();
 	            mBound = true;
-	            long lastId;
-	            if (mAdapter != null)
-	            	lastId = mAdapter.getLastId();
-	            else
-	            	lastId = 0;
+	    		long lastId = mAdapter.getLastId();
 	    		mService.setLastTwittId(lastId);
 			}
 

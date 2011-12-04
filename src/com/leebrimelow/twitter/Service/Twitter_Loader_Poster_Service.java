@@ -1,6 +1,9 @@
-package com.leebrimelow.twitter;
+package com.leebrimelow.twitter.Service;
 
 import java.util.ArrayList;
+
+import com.leebrimelow.twitter.R;
+import com.leebrimelow.twitter.Activity.Tweets_Activity;
 
 import twitter4j.Paging;
 import twitter4j.Status;
@@ -33,7 +36,7 @@ public class Twitter_Loader_Poster_Service extends Service {
 	private final Twitter twitter = new TwitterFactory().getInstance();
 	public class LocalBinder extends Binder {
 	      
-		 Twitter_Loader_Poster_Service getService() {
+		public Twitter_Loader_Poster_Service getService() {
 			 return Twitter_Loader_Poster_Service.this;
 		 }
 	}

@@ -1,5 +1,9 @@
 package com.leebrimelow.twitter;
 
+import com.leebrimelow.twitter.Adapter.MainMenuAdapter;
+import com.leebrimelow.twitter.Activity.AuthActivity;
+import com.leebrimelow.twitter.Activity.MainActivity;
+
 import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +14,7 @@ public class Main extends ExpandableListActivity{
     /** Called when the activity is first created. */
 	
 	private static MainMenuAdapter mAdapter;
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,27 +40,33 @@ public class Main extends ExpandableListActivity{
 			switch(childPosition){
 			case 0:
 				startActivity(new Intent(this, AuthActivity.class));
+				mAdapter = new MainMenuAdapter(this);
+				break;
+				
 			case 1:
-
+				break;
 			default:
 				// получаем id текущего акаунта 
 				int accountId = mAdapter.getAccountId(groupPosition,childPosition);
 					
 				Intent intent = new Intent(this, MainActivity.class);
 				intent.putExtra("account_id", accountId);
+				break;
 			}
+			break;
 		case 1:
 			switch(childPosition){
-			case 0:
+			case 0:		break;
 
-			default:									
-			}			
-		case 2:								
+			default:	break;								
+			}
+			break;
+		case 2:			break;						
 			
-		default:
+		default: break;
 		}
 		return super.onChildClick(parent, v, groupPosition, childPosition, id);
 	}
     
-    
+
 }

@@ -1,4 +1,4 @@
-package com.leebrimelow.twitter;
+package com.leebrimelow.twitter.DB;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
