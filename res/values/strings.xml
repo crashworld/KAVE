@@ -24,4 +24,9 @@
     <string name="toast_empty_status_text">Lenght of status text is null</string>
     <string name="toast_posted_tweet_successfully">Tweet was added</string>
     <string name="toast_posted_tweet_unsuccessful">Tweet was not added</string>
+    <string name="favourite">Favourite</string>
+    <string name="spam">Spam</string>
+    <string name="block_user">Block user</string>
+    <string name="follow_author">Follow author</string>
+    <string name="unfollow_author">Unfollow author</string>
 </resources>

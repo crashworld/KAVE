@@ -1,79 +1,95 @@
 package com.leebrimelow.twitter.Activity;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-
+import twitter4j.http.AccessToken;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.leebrimelow.twitter.R;
-import com.leebrimelow.twitter.Auth.OAuthHeader;
+import com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service;
+import com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service.LocalBinder;
 
-public class AuthActivity extends Activity{
+public class AuthActivity extends Activity {
 	private static final int ALERT_CONN_UNAVAIL = 0;
 	private static final int ALERT_CANT_AUTH = 1;
 	private static final int ALERT_AUTH_FAILED = 2;
-	private final String REQUEST_TOKEN_ENDPOINT="http://api.twitter.com/oauth/request_token";
-	private final String AUTH_URL = "http://api.twitter.com/oauth/authenticate?oauth_token=";
-	private final String CALLBACK_URL = "http://kave.flat32.by/";
-	private final String TAG = "AuthActivity";
-	private final String USER_AGENT = "Kave/1.0";
-	
+
 	private WebView authWebView;
-	private WebViewClient client = new WebViewClient(){
-	@Override
+	private String consumerKey;
+	private String consumerSecret;
+	private boolean isBound = false;
+	private Twitter_Loader_Poster_Service service;
+
+	private ServiceConnection conn = new ServiceConnection() {
+
+		public void onServiceDisconnected(ComponentName arg0) {
+			// TODO Auto-generated method stub
+			isBound = false;
+			service = null;
+		}
+
+		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
+			// TODO Auto-generated method stub
+			isBound = true;
+			LocalBinder lb = (LocalBinder) arg1;
+			service = lb.getService();
+			authWebView.loadUrl(service.startAuth(consumerKey, consumerSecret)
+					.toString());
+		}
+	};
+
+	private WebViewClient client = new WebViewClient() {
+		@Override
 		public void onLoadResource(WebView view, String url) {
 			Uri u = Uri.parse(url);
-			
-			if(u.getHost().equals("kave.flat32.by")){
+
+			if (u.getHost().equals("kave.flat32.by")) {
 				String tok = u.getQueryParameter("oauth_token");
-				if (tok != null){
-					authWebView.setVisibility(View.INVISIBLE);
+				authWebView.setVisibility(View.INVISIBLE);
+				if (tok != null) {
+					saveCredentials(service.receiveAccessToken());
 					finish();
-				}
-				else{
+				} else {
 					showDialog(ALERT_AUTH_FAILED);
 				}
-			}
-			else {
+			} else {
 				super.onLoadResource(view, url);
 			}
-		}	
+		}
 	};
-	
-	private AndroidHttpClient ahc;
-	
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		AlertDialog.Builder err = new AlertDialog.Builder(this);
-		
-		err.setTitle(R.string.error)
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-			}
-		});
 
-		switch(id){
+		err.setTitle(R.string.error).setPositiveButton("OK",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				});
+
+		switch (id) {
 		case ALERT_CANT_AUTH:
 			err.setMessage(R.string.can_t_start_auth);
 			break;
@@ -84,10 +100,10 @@ public class AuthActivity extends Activity{
 			err.setMessage(R.string.authorization_failed);
 			break;
 		}
-		
+
 		return err.create();
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,80 +111,49 @@ public class AuthActivity extends Activity{
 		authWebView = (WebView) findViewById(R.id.authWebView);
 		authWebView.setWebViewClient(client);
 	}
-	
+
 	@Override
 	protected void onResume() {
-		super.onResume();
-		ahc = AndroidHttpClient.newInstance(USER_AGENT);		
-		HttpUriRequest acquireRequestToken = new HttpPost(REQUEST_TOKEN_ENDPOINT);
-		OAuthHeader oauth = new OAuthHeader(REQUEST_TOKEN_ENDPOINT, CALLBACK_URL, "POST");
-		Properties p = new Properties();
-		
 		try {
+			super.onResume();
+			Properties p = new Properties();
 			p.load(getResources().openRawResource(R.raw.oauth));
+			consumerKey = (String) p.get("auth.consumer_key");
+			consumerSecret = (String) p.get("auth.consumer_secret");
+			Intent i = new Intent(this, Twitter_Loader_Poster_Service.class);
+			boolean b = bindService(i, conn, Context.BIND_AUTO_CREATE);
+			Log.d(null, String.format("Connection made: %s", b));
 		} catch (NotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
-		String consumerKey = (String) p.get("auth.consumer_key");
-		oauth.setConsumerKey(consumerKey);
-		String consumerSecret = (String) p.get("auth.consumer_secret");
-		oauth.setConsumerSecret(consumerSecret);
-		acquireRequestToken.setHeader(oauth);
-		AsyncTask<HttpUriRequest, Void, HttpResponse> t = new AsyncTask<HttpUriRequest, Void, HttpResponse>(){
-
-			@Override
-			protected HttpResponse doInBackground(HttpUriRequest... arg0) {
-				try {
-					return ahc.execute(arg0[0]);
-				} catch (IOException e) {
-					return null;
-				}
-			}
-			
-			
-			@Override
-			protected void onPostExecute(HttpResponse result) {
-				super.onPostExecute(result);
-				if (result == null){
-					showDialog(ALERT_CONN_UNAVAIL);
-					return;
-				}
-				
-				if (result.getStatusLine().getStatusCode() != 200){
-					showDialog(ALERT_CANT_AUTH);
-					return;
-				}
-				
-				HttpEntity entity = result.getEntity();
-				try {
-					Map <String, String> h = new HashMap<String,String>(); 
-					InputStreamReader r = new InputStreamReader(entity.getContent());
-					BufferedReader r1 = new BufferedReader(r);
-					
-					String line = r1.readLine();
-					for (String param: line.split("&")){
-						String[] pv = param.split("=");
-						h.put(pv[0],pv[1]);
-					}
-					String atoken = h.get("oauth_token");
-					authWebView.loadUrl(AUTH_URL.concat(atoken));
-					r1.close();
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		t.execute(acquireRequestToken);
 	}
-	
+
+	private void saveCredentials(AccessToken t) {
+		SharedPreferences sp = getSharedPreferences("accounts", 0);
+		Editor spe = sp.edit();
+
+		String str_users_list = sp.getString("users_list", "");
+		List<String> users_list = Arrays.asList(str_users_list.split(" "));
+		if (!users_list.contains(t.getScreenName())) {
+			str_users_list = str_users_list.concat(t.getScreenName()).concat(
+					" ");
+			spe.putString("users_list", str_users_list);
+		}
+
+		spe.putString(String.format("token_%s", t.getScreenName()),
+				t.getToken());
+		spe.putString(String.format("token_s_%s", t.getScreenName()),
+				t.getTokenSecret());
+		spe.commit();
+	}
+
 	@Override
-	protected void onStop() {
-		super.onStop();
-		ahc.close();
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		if (isBound)
+			unbindService(conn);
 	}
 }

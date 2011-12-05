@@ -7,17 +7,17 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <service android:name=".Twitter_Loader_Poster_Service"/>
+        <service android:name="com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service"/>
         <activity android:name="com.leebrimelow.twitter.Activity.AuthActivity"/>
         
-        <activity android:name=".Main"
+        <activity android:name="com.leebrimelow.twitter.Main"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity android:name=".MainActivity"
+		<activity android:name="com.leebrimelow.twitter.Activity.MainActivity"
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
@@ -25,28 +25,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-              <activity android:name=".Tweets_Activity"
+              <activity android:name="com.leebrimelow.twitter.Activity.Tweets_Activity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.LAST_TWITTS" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Friends_Tweets_Activity"
+        <activity android:name="com.leebrimelow.twitter.Activity.Friends_Tweets_Activity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.FRIENDS" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".User_Timeline_Activity"
+        <activity android:name="com.leebrimelow.twitter.Activity.User_Timeline_Activity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.USER_TIMELINE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Post_Tweet_Activity"
+        <activity android:name="com.leebrimelow.twitter.Activity.Post_Tweet_Activity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.POST_TWEET_ACTIVITY" />

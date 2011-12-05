@@ -19,4 +19,10 @@
     <string name="about_myself">Обо мне</string>
     <string name="filters">Фильтры</string>
     <string name="settings">Настройки</string>
+    
+    <string name="favourite">В избранное</string>
+    <string name="spam">Спам</string>
+    <string name="block_user">Блокировать</string>
+    <string name="follow_author">Фолловить</string>
+    <string name="unfollow_author">Расфолловить</string>
 </resources>
