@@ -1,6 +1,8 @@
 package com.leebrimelow.twitter.Adapter;
 
 
+import java.util.List;
+
 import com.leebrimelow.twitter.R;
 import com.leebrimelow.twitter.Provider.KAVE_Content_Provider;
 
@@ -23,18 +25,18 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	private static String mGroupTitle[];
 	private static Context mContext;
 	private static LayoutInflater inflater;
-	private static Cursor mAccontCursor, mSearchCursor, mTrendCursor;
-	private static boolean isAccountCursor, isSearchCursor, isTrendCursor;
+	private static Cursor mSearchCursor, mTrendCursor;
+	private static boolean isSearchCursor, isTrendCursor;
 	private static ContentResolver mContentResolver;
+	private List<String> users;
 	
 	
-	public MainMenuAdapter(Context context) {
-		// TODO Auto-generated constructor stub
+	public MainMenuAdapter(Context context, List<String> users) {
 		mContext = context;
 		inflater = LayoutInflater.from(mContext);
 		mGroupTitle = mContext.getResources().getStringArray(R.array.menu_categories);
 		mContentResolver = context.getContentResolver();
-		
+		this.users = users;
 		
 		// подгрузка данных из бд
 //		getData();
@@ -44,9 +46,6 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	
 		// Выборка из бд с помощью контент провайдера курсоров Акаунтов, Поисков, Трендов;
 	private void getData(){
-		mAccontCursor = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_AACCOUNTS, null, null, null, null);
-		if(mAccontCursor.moveToFirst())
-			isAccountCursor = true;
 		mTrendCursor = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_TRENDS, null, null, null, null);
 		if(mTrendCursor.moveToFirst())
 			isTrendCursor = true;
@@ -54,38 +53,26 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		if(mSearchCursor.moveToFirst())
 			isSearchCursor = true;
 	}
-	public int getAccountId(int groupPosition, int childPosition){
-		if((isAccountCursor) && (groupPosition == 0)){
-			mAccontCursor.moveToPosition(childPosition);
-			return mAccontCursor.getInt(mAccontCursor.getColumnIndex("account_id"));
+	
+	public String getAccountId(int groupPosition, int childPosition){
+		if(groupPosition == 0){
+			return users.get(childPosition-1);
 		}
-		else
-			return 0;
+		else return null;
 	}
 	
 	public boolean areAllItemsEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	public Object getChild(int arg0, int arg1) {
-		// TODO Auto-generated method stub
 		switch (arg0){
 		case 0:
 			switch(arg1){
 			case 0:
 				return mContext.getResources().getString(R.string.add_new);
 			default:
-				if (isAccountCursor){
-					if(arg1 < 2 + mAccontCursor.getCount())
-					{
-						mAccontCursor.moveToPosition(arg1);
-						return mAccontCursor.getString(mAccontCursor.getColumnIndex("screen_name"));
-					}else
-						return null;
-				}else
-					return null;
-				
+				return getAccountId(arg0, arg1);
 			}
 		case 1:
 			switch(arg1){
@@ -120,13 +107,11 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	}
 
 	public long getChildId(int arg0, int arg1) {
-		// TODO Auto-generated method stub
 		return arg0 * arg1 + arg1;
 	}
 
 	public View getChildView(int arg0, int arg1, boolean arg2, View arg3,
 			ViewGroup arg4) {
-		// TODO Auto-generated method stub
 		if (arg3 == null) {
 			arg3 = newChildView(arg0, arg1, getChildId(arg0, arg1), arg4);
 		}
@@ -136,13 +121,10 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	}
 
 	public int getChildrenCount(int arg0) {
-		// TODO Auto-generated method stub
 		int count = 0;
 		switch(arg0){		
 		case 0:
-			if(isAccountCursor)
-				count = mAccontCursor.getCount();
-			return 1 + count;
+			return users.size() + 1;
 		case 1:
 			if(isSearchCursor)
 				count = + mSearchCursor.getCount();
@@ -158,17 +140,14 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	}
 
 	public long getCombinedChildId(long arg0, long arg1) {
-		// TODO Auto-generated method stub
 		return arg0 * arg1 + arg1;
 	}
 
 	public long getCombinedGroupId(long arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public Object getGroup(int arg0) {
-		// TODO Auto-generated method stub
 		if ((arg0 >= 0) && (arg0 < 3))
 			return mGroupTitle[arg0];
 		else 
@@ -176,54 +155,44 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 	}
 
 	public int getGroupCount() {
-		// TODO Auto-generated method stub
 		return GROUP_COUNT;
 	}
 
 	public long getGroupId(int arg0) {
-		// TODO Auto-generated method stub
 		return arg0;
 	}
 
 	public View getGroupView(int arg0, boolean arg1, View arg2, ViewGroup arg3) {
-		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.main_menu_item, null);		
 		((TextView) view.findViewById(R.id.text)).setText((String) getGroup(arg0));
 		return view;
 	}
 
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isChildSelectable(int arg0, int arg1) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public void onGroupCollapsed(int arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void onGroupExpanded(int arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void registerDataSetObserver(DataSetObserver arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void unregisterDataSetObserver(DataSetObserver observer) {
-		// TODO Auto-generated method stub
 
 	}
 
