@@ -40,15 +40,15 @@ public class TweetsAdapter extends BaseAdapter {
 		inflater = LayoutInflater.from(mContext);
 		newTweets = new ArrayList<Status>();
 		//mTwitterSQLiteOpenHelper = SQLiteOpenHelper().getInstace();
-		oldTweets = mTwitterSQLiteOpenHelper.getReadableDatabase().rawQuery("SELECT json_status FROM json_status WHERE id=? ORDER BY date", new String[]{String.valueOf(accountId)});
-		oldTweets.moveToLast();
-		try {
-			lastTwittId = ((Status) new JSONObject(oldTweets.getString(oldTweets.getColumnIndex("json_status")))).getId();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			lastTwittId = 0;
-		}
+//		oldTweets = mTwitterSQLiteOpenHelper.getReadableDatabase().rawQuery("SELECT json_status FROM json_status WHERE id=? ORDER BY date", new String[]{String.valueOf(accountId)});
+//		oldTweets.moveToLast();
+//		try {
+//			lastTwittId = ((Status) new JSONObject(oldTweets.getString(oldTweets.getColumnIndex("json_status")))).getId();
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			lastTwittId = 0;
+//		}
 	}
 	
 	

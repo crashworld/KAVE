@@ -119,12 +119,27 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		
 		return arg3;
 	}
+	
+	/*Возвращает кол-во авторизированных пользователей
+	 * @return count кол-во авторизированных пользователей
+	 */
+	private int getUsersCount()
+	{
+		int count = 0;
+		for(String user : users)
+		{
+			if(!user.equals(""))
+				count++;	
+		}		
+		return count + 1;
+	}
 
 	public int getChildrenCount(int arg0) {
 		int count = 0;
 		switch(arg0){		
 		case 0:
-			return users.size() + 1;
+			count = getUsersCount(); 
+			return count;
 		case 1:
 			if(isSearchCursor)
 				count = + mSearchCursor.getCount();

@@ -67,18 +67,19 @@ public class MainActivity extends TabActivity {
 		    Intent intent;  // Reusable Intent for each tab		    
 		    
 		    // Create an Intent to launch an Activity for the tab (to be reused)
-		    intent = new Intent().setClass(this, Tweets_Activity.class);	    
-		    
-		    intent.putExtra("account_id", accountId);
+//		    intent = new Intent().setClass(this, Friends_Tweets_Activity.class);
+		    intent = new Intent().setClass(this, Tweets_Activity.class);
+		    intent.putExtra("account_id", accountId);		    
 		    
 		    // Initialize a TabSpec for each tab and add it to the TabHost
 		    spec = tabHost.newTabSpec("last_twitts").setIndicator("Twitts").setContent(intent);
 		    tabHost.addTab(spec);
 
 		    // Do the same for the other tabs
-		    intent = new Intent().setClass(this, Friends_Tweets_Activity.class);
+		    intent = new Intent().setClass(this, Friends_Tweets_Activity.class);		    
 		    spec = tabHost.newTabSpec("frieds").setIndicator("Friends Twitts").setContent(intent);
 		    tabHost.addTab(spec);
+		    
 
 		    intent = new Intent().setClass(this, User_Timeline_Activity.class);
 		    spec = tabHost.newTabSpec("user_timeline").setIndicator("User Timeline").setContent(intent);

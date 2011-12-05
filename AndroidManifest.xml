@@ -4,20 +4,12 @@
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="8" />
-
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <permission android:name="com.leebrimelow.twitter.READ_TWITTER" android:protectionLevel="normal"/>
     <permission android:name="com.leebrimelow.twitter.WRITE_TWITTER" android:protectionLevel="normal"/>
-
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-
-    <provider android:name=".KAVE_Content_Provider" android:authorities="com.leebrimelow.twitter.kaveprovider" 
-              android:exported="true" android:readPermission="com.leebrimelow.twitter.READ_TWITTER" 
-              android:writePermission="com.leebrimelow.twitter.WRITE_TWITTER"/>
-
+               
         <service android:name="com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service"/>
-
         <activity android:name="com.leebrimelow.twitter.Activity.AuthActivity"/>
         
         <activity android:name="com.leebrimelow.twitter.Main"

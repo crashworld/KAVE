@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Twitter</string>
+    <string name="app_name">KAVE</string>
     <string name="no_tweets">No Tweets</string>
     <string name="can_t_start_auth">Can\'t start authorization</string>
     <string name="internet_connection_required">Internet connection required</string>
