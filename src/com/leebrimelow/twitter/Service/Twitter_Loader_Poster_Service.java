@@ -97,14 +97,28 @@ public class Twitter_Loader_Poster_Service extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
+
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		isDownloadingTweets = false;
+		mHandler.removeCallbacks(mTweetsCheckup);
+	}
+	
+	
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
-		if (!isDownloadingTweets) {
-
-			mHandler.postDelayed(mTweetsCheckup, TIME_DELAY_Tweets_CHECKUP);
-			isDownloadingTweets = true;
-		}
+		if(arg0.getAction() != null)
+			if(arg0.getAction().toString().equals("startChecking")){
+				if (!isDownloadingTweets) {
+	
+					mHandler.postDelayed(mTweetsCheckup, TIME_DELAY_Tweets_CHECKUP);
+					isDownloadingTweets = true;
+				}
+			}	
 		return mBinder;
 	}
 
@@ -170,15 +184,15 @@ public class Twitter_Loader_Poster_Service extends Service {
 	// метод возвращает массив закачанных статусов
 
 	public ArrayList<Status> downloadNewTweets() {
-
+		
 		if (isDownloadedTweets) {
 			isDownloadedTweets = false;
 			mHandler.postDelayed(mTweetsCheckup, TIME_DELAY_Tweets_CHECKUP);
 			isDownloadingTweets = true;
 			newTweetsNotificationManager.cancel(Tweets_NOTIFICATION_ID);
 			return newTweetsList;
-		}
-		return null;
+		}else
+			return null;
 	}
 
 	// метод посылающий новый статус пользователя. Возвращает true в случае

@@ -27,12 +27,33 @@ public class Tweets_Activity extends ListActivity {
 	private Twitter twitter;
 	private Twitter_Loader_Poster_Service mService;
 	private boolean mBound;
+
+	private ServiceConnection mConnection = new ServiceConnection() {
+
+	      	public void onServiceConnected(ComponentName name, IBinder service) {
+				// TODO Auto-generated method stub
+				LocalBinder binder = (LocalBinder) service;
+	            mService = binder.getService();
+	            mBound = true;
+	            long lastId;
+	            if (mAdapter != null)
+	            	lastId = mAdapter.getLastId();
+	            else
+	            	lastId = 0;
+	    		mService.setLastTwittId(lastId);
+			}
+
+			public void onServiceDisconnected(ComponentName name) {
+				// TODO Auto-generated method stub
+				mBound = false;
+			}		
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		Intent intent = getIntent();
+		Intent intent = getIntent(); 
 		accountId = intent.getIntExtra("account_id", 0);
 		twitter = new TwitterFactory().getInstance();
 	}
@@ -43,8 +64,7 @@ public class Tweets_Activity extends ListActivity {
 		super.onStart();
 		 // Bind to LocalService        
 		mAdapter = new TweetsAdapter(this, accountId);
-		Intent intent = new Intent(this, Twitter_Loader_Poster_Service.class);
-	//	bindService(intent, mConnection, BIND_AUTO_CREATE);
+		
        
 	}
 	
@@ -52,6 +72,9 @@ public class Tweets_Activity extends ListActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		Intent intent = new Intent(this, com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service.class);
+		intent.setAction("startChecking");
+		getApplicationContext().bindService(intent, mConnection, BIND_AUTO_CREATE);
 		loadTweets();
 	}
 	
@@ -60,8 +83,9 @@ public class Tweets_Activity extends ListActivity {
 	        super.onPause();
 	        // Unbind from the service
 	        if (mBound) {
-	            unbindService(mConnection);
+	            getApplicationContext().unbindService(mConnection);
 	            mBound = false;
+	            mService = null;
 	        }
 	    }
 	
@@ -90,7 +114,7 @@ public class Tweets_Activity extends ListActivity {
 	}
 	
 	private void addNewTweet(){
-		
+		startActivity(new Intent(this, Post_Tweet_Activity.class));
 		
 	}
 	
@@ -117,24 +141,5 @@ public class Tweets_Activity extends ListActivity {
 		}
 	}
 	
-	   private ServiceConnection mConnection = new ServiceConnection() {
-
-	      	public void onServiceConnected(ComponentName name, IBinder service) {
-				// TODO Auto-generated method stub
-				LocalBinder binder = (LocalBinder) service;
-	            mService = binder.getService();
-	            mBound = true;
-	            long lastId;
-	            if (mAdapter != null)
-	            	lastId = mAdapter.getLastId();
-	            else
-	            	lastId = 0;
-	    		mService.setLastTwittId(lastId);
-			}
-
-			public void onServiceDisconnected(ComponentName name) {
-				// TODO Auto-generated method stub
-				mBound = false;
-			}
-	    };
+	  
 }

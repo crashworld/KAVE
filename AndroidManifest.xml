@@ -17,7 +17,7 @@
 			android:readPermission="com.leebrimelow.twitter.READ_TWITTER"
 			android:writePermission="com.leebrimelow.twitter.WRITE_TWITTER"/>      
                
-        <service android:name="com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service"/>
+        <service android:name="com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service" android:enabled="true"/>
         <activity android:name="com.leebrimelow.twitter.Activity.AuthActivity"/>
         
         <activity android:name="com.leebrimelow.twitter.Main"
@@ -38,7 +38,7 @@
               <activity android:name="com.leebrimelow.twitter.Activity.Tweets_Activity"
                   android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.LAST_TWITTS" />
+                <action android:name="android.intent.action.TWEETS_ACTIVITY" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

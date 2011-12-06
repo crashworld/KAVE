@@ -39,55 +39,24 @@ public class MainActivity extends TabActivity {
 	private User current_user;
 	private ContentResolver mContentResolver;
 	private Button previouse_but, current_button, next_button;
-	private boolean isBound;
-	private Twitter_Loader_Poster_Service mService;
-	
-	private ServiceConnection conn = new ServiceConnection() {
 
-		public void onServiceDisconnected(ComponentName arg0) {
-			// TODO Auto-generated method stub
-			isBound = false;
-			mService = null;
-		}
-
-		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-			// TODO Auto-generated method stub
-			isBound = true;
-			LocalBinder lb = (LocalBinder) arg1;
-			mService = lb.getService();			
-		}
-	};
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		Intent intent = getIntent();		
+		Intent intent = getIntent();			
 		//account_id = intent.getIntExtra("account_id", 0);
-		display_name = intent.getStringExtra("display_name");
+		display_name = intent.getStringExtra("display_name");		
 		createTabView();	
-		
-	}
-	
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		//bindService(new Intent(this, com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service.class), conn, BIND_AUTO_CREATE);
-		mContentResolver = getContentResolver();
-		//setupTwitter();	
 		setupContentView();
+		mContentResolver = getContentResolver();	
 	}
 	
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		if (isBound)
-			unbindService(conn);
-	}
+	
+	
+	
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
@@ -97,22 +66,6 @@ public class MainActivity extends TabActivity {
 		getMenuInflater().inflate(R.menu.tweet_actions, menu);
 	}
 	
-	private void setupTwitter(){
-		
-		twitter = new TwitterFactory().getInstance();		
-		
-		String consumerKey, consumerSecretKey;
-		
-		// получаем необходимые ключи по id акаунта
-		consumerKey = getConsumerKey();
-		consumerSecretKey = getConsumerSecretKey();
-	
-		AccessToken accessToken = new AccessToken(consumerKey, consumerSecretKey);
-		
-		
-	    twitter.setOAuthConsumer(consumerKey, consumerSecretKey);
-	    twitter.setOAuthAccessToken(accessToken);
-	}
 	
 	private void createTabView(){
 		
@@ -143,6 +96,8 @@ public class MainActivity extends TabActivity {
 		    tabHost.setCurrentTab(0);
 	}
 	
+	
+	
 	private void setupContentView(){
 		
 		previouse_but = (Button) findViewById(R.id.previous_account);
@@ -152,7 +107,26 @@ public class MainActivity extends TabActivity {
 		current_button.setText(display_name);
 		current_button.setBackgroundColor(Color.rgb(255, 166, 33));
 	}
-
+	
+	
+	/* перенесено
+		private void setupTwitter(){
+			
+			twitter = new TwitterFactory().getInstance();		
+			
+			String consumerKey, consumerSecretKey;
+			
+			// получаем необходимые ключи по id акаунта
+			consumerKey = getConsumerKey();
+			consumerSecretKey = getConsumerSecretKey();
+		
+			AccessToken accessToken = new AccessToken(consumerKey, consumerSecretKey);
+			
+			
+		    twitter.setOAuthConsumer(consumerKey, consumerSecretKey);
+		    twitter.setOAuthAccessToken(accessToken);
+		}
+		
 	 private String getConsumerKey(){
 	    	
 		// Cursor account = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_ACCOUNTS, new String[]{"consumer_key"}, "account_id=?", new String[] {String.valueOf(account_id)}, null); 
@@ -163,7 +137,7 @@ public class MainActivity extends TabActivity {
 	    	
 	   	return mService.getUserAccessTokenSecret(display_name);
 	 }
-	 
+	 */
 	 private void setupCurrentUser(long account_id){
 		 
 		 Cursor account = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_ACCOUNTS, new String[]{"json_user_obj"}, "account_id=?", new String[] {String.valueOf(account_id)}, null);
