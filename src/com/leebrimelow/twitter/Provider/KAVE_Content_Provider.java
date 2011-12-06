@@ -65,12 +65,20 @@ public class KAVE_Content_Provider extends ContentProvider {
 			
 		case SEARCHES:
 			count = 0;
+			break;
+			
 		case SEARCH_ID:
 			count = 0;
+			break;
+			
 		case TRENDS:
 			count = 0;
+			break;
+			
 		case TREND_ID:
 			count = 0;
+			break;
+			
 		case AVATARS:
 			count = db.delete(TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME, selection, selectionArgs);				
 			break;
@@ -240,15 +248,19 @@ public class KAVE_Content_Provider extends ContentProvider {
 				
 			case SEARCHES:
 				c = null;
+				break;
 				
 			case SEARCH_ID:
 				c = null;
+				break;
 				
 			case TRENDS:
 				c = null;
+				break;
 				
 			case TREND_ID:
 				c = null;
+				break;
 				
 			case AVATARS:
 				sortOrder = "user_id";
@@ -270,7 +282,7 @@ public class KAVE_Content_Provider extends ContentProvider {
 			case AACCOUNT_ID:
 				from = TwitterSQLiteOpenHelper.ACCOUNTS_TABLE_NAME + " INNER JOIN " + TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME + " ON " + TwitterSQLiteOpenHelper.ACCOUNTS_TABLE_NAME +".account_id="+TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME+".user_id";
 				c = db.query(from, projection, selection + " user_id=?", selectionArgs , null, null, null);
-				c= null;
+				break;
 				
 			case AUSERS:
 				if(sortOrder == null){
@@ -283,25 +295,25 @@ public class KAVE_Content_Provider extends ContentProvider {
 			case AUSER_ID:
 				from = TwitterSQLiteOpenHelper.USERS_TABLE_NAME + " INNER JOIN " + TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME + " ON " + TwitterSQLiteOpenHelper.USERS_TABLE_NAME + ".user_id=" + TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME + ".user_id";
 				c = db.query(from, projection, selection + " user_id=?", selectionArgs , null, null, null);
-				c = null;
+				break;
 				
 			case ASTATUSES:
 				if(sortOrder == null){
 					sortOrder = "satus_id";
 				}
-				from = TwitterSQLiteOpenHelper.STATUSES_TABLE_NAME + "I NNER JOIN " + TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME + " ON " + TwitterSQLiteOpenHelper.STATUSES_TABLE_NAME +".status_id="+TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME+".user_id"; 
-				c = db.query(from, projection, selection, selectionArgs, null, null, sortOrder);
+				from = TwitterSQLiteOpenHelper.STATUSES_TABLE_NAME + " INNER JOIN " + TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME + " ON " + TwitterSQLiteOpenHelper.STATUSES_TABLE_NAME +".user_id="+TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME+".user_id"; 
+				c = db.rawQuery("SELECT * FROM " + from, null);// + " WHERE "+ selection + " ORDER BY " + sortOrder, selectionArgs);//query(from, projection, selection, selectionArgs, null, null, sortOrder);
 				break;
 				
 			case ASTATUS_ID:
 				from = TwitterSQLiteOpenHelper.STATUSES_TABLE_NAME + " INNER JOIN " + TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME + " ON " + TwitterSQLiteOpenHelper.STATUSES_TABLE_NAME +".status_id="+TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME+".user_id";
 				c = db.query(from, projection, selection + " user_id=?", selectionArgs , null, null, null);
-				c = null;
+				break;
 				
 			default:
 				c = null;
 			}
-			c.setNotificationUri(getContext().getContentResolver(), uri);
+		//	c.setNotificationUri(getContext().getContentResolver(), uri);
 			return c;
 	}
 
@@ -326,15 +338,19 @@ public class KAVE_Content_Provider extends ContentProvider {
 			
 		case SEARCHES:
 			count = 0;
+			break;
 			
 		case SEARCH_ID:
 			count = 0;
+			break;
 			
 		case TRENDS:
 			count = 0;
+			break;
 			
 		case TREND_ID:
 			count = 0;
+			break;
 			
 		case AVATARS:
 			count = db.update(TwitterSQLiteOpenHelper.AVATARS_TABLE_NAME, values, selection, selectionArgs);				

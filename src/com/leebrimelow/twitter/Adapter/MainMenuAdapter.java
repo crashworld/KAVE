@@ -39,7 +39,7 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		this.users = users;
 		
 		// подгрузка данных из бд
-//		getData();
+		getData();
 		
 		
 	}
@@ -47,11 +47,13 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		// Выборка из бд с помощью контент провайдера курсоров Акаунтов, Поисков, Трендов;
 	private void getData(){
 		mTrendCursor = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_TRENDS, null, null, null, null);
-		if(mTrendCursor.moveToFirst())
-			isTrendCursor = true;
+		if(mTrendCursor != null)
+			if(mTrendCursor.moveToFirst())
+				isTrendCursor = true;
 		mSearchCursor = mContentResolver.query(KAVE_Content_Provider.CONTENT_URI_SEARCHES, null, null, null, null);
-		if(mSearchCursor.moveToFirst())
-			isSearchCursor = true;
+		if(mSearchCursor != null)
+			if(mSearchCursor.moveToFirst())
+				isSearchCursor = true;
 	}
 	
 	public String getAccountId(int groupPosition, int childPosition){
@@ -120,7 +122,8 @@ public class MainMenuAdapter implements ExpandableListAdapter {
 		return arg3;
 	}
 	
-	/*Возвращает кол-во авторизированных пользователей
+	/**
+	 * Возвращает кол-во авторизированных пользователей
 	 * @return count кол-во авторизированных пользователей
 	 */
 	private int getUsersCount()

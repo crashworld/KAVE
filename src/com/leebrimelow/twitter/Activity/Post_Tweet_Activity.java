@@ -54,7 +54,7 @@ public class Post_Tweet_Activity extends Activity {
 		charCounter = (TextView) findViewById(R.id.char_counter);
 		postButton = (Button) findViewById(R.id.post_button);
 		tweetContent = (EditText) findViewById(R.id.tweet_content);
-	 
+		postButton.setBackgroundColor(Color.rgb(255, 166, 33));
 		// лисенер поглощает событие если количество символов в сообщение = 140 символам и выводит Тоаst
 		tweetContent.setOnKeyListener(new OnKeyListener() {
 			

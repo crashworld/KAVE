@@ -2,9 +2,13 @@ package com.leebrimelow.twitter;
 
 import java.util.List;
 
+import twitter4j.Twitter;
+import twitter4j.http.AccessToken;
+
 import com.leebrimelow.twitter.Adapter.MainMenuAdapter;
 import com.leebrimelow.twitter.Activity.AuthActivity;
 import com.leebrimelow.twitter.Activity.MainActivity;
+import com.leebrimelow.twitter.Activity.Post_Tweet_Activity;
 import com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service;
 import com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service.LocalBinder;
 
@@ -12,16 +16,20 @@ import android.app.ExpandableListActivity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 public class Main extends ExpandableListActivity{
     /** Called when the activity is first created. */
 	
 	private static MainMenuAdapter mAdapter;
 	private Twitter_Loader_Poster_Service tlps;
+	private Twitter twitter;
 	protected boolean bound = false;
 	
 	private ServiceConnection conn = new ServiceConnection() {
@@ -61,21 +69,30 @@ public class Main extends ExpandableListActivity{
 		case 0:
 			switch(childPosition){
 			case 0:
+			    ConnectivityManager cm = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+			    NetworkInfo nInfo = cm.getActiveNetworkInfo();
+			    if (nInfo != null && nInfo.isConnected()) {
 				startActivity(new Intent(this, AuthActivity.class));
+			    }else
+			    	Toast.makeText(this, "OFFLINE", Toast.LENGTH_LONG).show();	
 				break;
 			default:
 				// получаем id текущего акаунта 
 				String accountId = mAdapter.getAccountId(groupPosition,childPosition);
-					
+				AccessToken accessToken = new AccessToken(tlps.getUserAccessToken(accountId), tlps.getUserAccessTokenSecret(accountId));
+				twitter.setOAuthAccessToken(accessToken);
 				Intent intent = new Intent(this, MainActivity.class);
 				intent.putExtra("account_id", accountId);
+				intent.putExtra("display_name", accountId);
 				startActivity(intent);
 				break;
 			}
 			break;
 		case 1:
 			switch(childPosition){
-			case 0:		break;
+			case 0:
+				startActivity(new Intent(this, Post_Tweet_Activity.class));
+				break;
 
 			default:	break;								
 			}
@@ -89,8 +106,11 @@ public class Main extends ExpandableListActivity{
     
 	@Override
 	protected void onPause() {
-		super.onStop();
+		// TODO Auto-generated method stub
+		super.onPause();
 		if (bound)
 			unbindService(conn);
 	}
+	
+	
 }

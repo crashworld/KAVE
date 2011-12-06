@@ -1,5 +1,9 @@
 package com.leebrimelow.twitter.Activity;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.http.AccessToken;
+
 import com.leebrimelow.twitter.R;
 import com.leebrimelow.twitter.Adapter.TweetsAdapter;
 import com.leebrimelow.twitter.Service.Twitter_Loader_Poster_Service;
@@ -20,6 +24,7 @@ public class Tweets_Activity extends ListActivity {
 
 	private TweetsAdapter mAdapter;
 	private int accountId;
+	private Twitter twitter;
 	private Twitter_Loader_Poster_Service mService;
 	private boolean mBound;
 	
@@ -27,7 +32,9 @@ public class Tweets_Activity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		accountId = getIntent().getIntExtra("account_id", 0);
+		Intent intent = getIntent();
+		accountId = intent.getIntExtra("account_id", 0);
+		twitter = new TwitterFactory().getInstance();
 	}
 	
 	@Override
@@ -37,7 +44,7 @@ public class Tweets_Activity extends ListActivity {
 		 // Bind to LocalService        
 		mAdapter = new TweetsAdapter(this, accountId);
 		Intent intent = new Intent(this, Twitter_Loader_Poster_Service.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+	//	bindService(intent, mConnection, BIND_AUTO_CREATE);
        
 	}
 	
@@ -49,8 +56,8 @@ public class Tweets_Activity extends ListActivity {
 	}
 	
 	 @Override
-	    protected void onStop() {
-	        super.onStop();
+	    protected void onPause() {
+	        super.onPause();
 	        // Unbind from the service
 	        if (mBound) {
 	            unbindService(mConnection);
@@ -68,8 +75,9 @@ public class Tweets_Activity extends ListActivity {
 	private void loadTweets(){
 		if(mAdapter == null){
 				mAdapter = new TweetsAdapter(this, accountId);
-				setListAdapter(mAdapter);
-		}
+			}
+			setListAdapter(mAdapter);
+		
 		
 	}
 	
@@ -129,5 +137,4 @@ public class Tweets_Activity extends ListActivity {
 				mBound = false;
 			}
 	    };
-	
 }

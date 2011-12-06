@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.json.JSONStringer;
 
 import com.leebrimelow.twitter.R;
+import com.leebrimelow.twitter.Provider.KAVE_Content_Provider;
 
 import twitter4j.Status;
 import twitter4j.User;
@@ -39,16 +40,19 @@ public class TweetsAdapter extends BaseAdapter {
 		accountId = acId;
 		inflater = LayoutInflater.from(mContext);
 		newTweets = new ArrayList<Status>();
-		//mTwitterSQLiteOpenHelper = SQLiteOpenHelper().getInstace();
-//		oldTweets = mTwitterSQLiteOpenHelper.getReadableDatabase().rawQuery("SELECT json_status FROM json_status WHERE id=? ORDER BY date", new String[]{String.valueOf(accountId)});
-//		oldTweets.moveToLast();
-//		try {
-//			lastTwittId = ((Status) new JSONObject(oldTweets.getString(oldTweets.getColumnIndex("json_status")))).getId();
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			lastTwittId = 0;
-//		}
+		
+		oldTweets = mContext.getContentResolver().query(KAVE_Content_Provider.CONTENT_URI_ASATUSES, new String[]{"json_status_obj"}, "account_id=?", new String[]{String.valueOf(accountId)}, null);
+		
+		if(oldTweets.moveToLast()){
+			try {
+				lastTwittId = ((Status) new JSONObject(oldTweets.getString(oldTweets.getColumnIndex("json_status")))).getId();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				lastTwittId = 0;
+			}
+		}
+		
 	}
 	
 	

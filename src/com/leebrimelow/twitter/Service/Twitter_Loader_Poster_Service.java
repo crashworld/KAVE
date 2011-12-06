@@ -22,10 +22,13 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.widget.Toast;
 
 public class Twitter_Loader_Poster_Service extends Service {
 
@@ -115,22 +118,29 @@ public class Twitter_Loader_Poster_Service extends Service {
 
 	public void checkingNewTweets() {
 
-		try {
-			newTweetsList = twitter.getHomeTimeline(new Paging(lastTwittId));
-			if (newTweetsList.size() > 0) {
-				isDownloadingTweets = false;
-				isDownloadedTweets = true;
-				lastTwittId = newTweetsList.get(0).getId();
-				newTweetsNotificationManager.notify(Tweets_NOTIFICATION_ID,
-						newTweetsNotification);
-			} else
-				mHandler.postDelayed(mTweetsCheckup, TIME_DELAY_Tweets_CHECKUP);
-
-		} catch (TwitterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo nInfo = cm.getActiveNetworkInfo();
+		if (nInfo != null && nInfo.isConnected()){
+						 
+			try {
+				newTweetsList = twitter.getHomeTimeline(new Paging(lastTwittId));
+				if (newTweetsList.size() > 0) {
+					isDownloadingTweets = false;
+					isDownloadedTweets = true;
+					lastTwittId = newTweetsList.get(0).getId();
+					newTweetsNotificationManager.notify(Tweets_NOTIFICATION_ID,
+							newTweetsNotification);
+				} else
+					mHandler.postDelayed(mTweetsCheckup, TIME_DELAY_Tweets_CHECKUP);
+	
+			} catch (TwitterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			mHandler.postDelayed(mTweetsCheckup, TIME_DELAY_Tweets_CHECKUP);
+			Toast.makeText(this, "Offline", Toast.LENGTH_LONG).show();	
 		}
-
 	}
 
 	// метод создаёт уведомление для пользователя о новых твитах

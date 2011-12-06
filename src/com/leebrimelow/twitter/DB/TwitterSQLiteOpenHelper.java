@@ -10,7 +10,7 @@ public class TwitterSQLiteOpenHelper extends SQLiteOpenHelper {
 	private static TwitterSQLiteOpenHelper instanceOf;
 	
 	public static final String DATABASE_NAME = "KAVE_DB";
-	public static final int DATA_VERSION = 1;
+	public static final int DATA_VERSION = 2;
 	public static final String ACCOUNTS_TABLE_NAME = "accounts";
 	public static final String STATUSES_TABLE_NAME = "statuses";
 	public static final String USERS_TABLE_NAME = "users";
@@ -18,12 +18,12 @@ public class TwitterSQLiteOpenHelper extends SQLiteOpenHelper {
 	public static final String TRENDS_TABLE_NAME = "trends";
 	public static final String AVATARS_TABLE_NAME = "avatars";
 		
-    private static final String ACCOUNTS_TABLE_CREATE = "CREATE TABLE " + ACCOUNTS_TABLE_NAME + " (account_id INTEGER PRIMARY KEY, screen_name TEXT NOT NULL, account_token INTEGER NOT NULL, json_user_obj TEXT );";
-    private static final String STATUSES_TABLE_CREATE = "CREATE TABLE " + STATUSES_TABLE_NAME +" (status_id INTEGER PRIMARY KEY, user_id NOT NULL, status_text TEXT NOT NULL, isFavorited INTEGER NOT NULL, isRetweet INTEGER NOT NULL, isRetweetedByMe INTEGER NOT NULL, create_date TEXT NOT NULL, json_status_obj TEXT NT NULL);";
-    private static final String USERS_TABLE_CREATE = "CREATE TABLE " + USERS_TABLE_NAME + " (user_id INTEGER PRIMARY KEY, screen_name TEXT NOT NULL, isFollower INTEGER NOT NULL, isFriend  INTEGER NOT NULL, json_user_obj TEXT NOT NULL );";
-    private static final String SEARCHES_TABLE_CREATE = "CREATE TABLE " + SEARCHES_TABLE_NAME + " (search_id INTEGER PRIMARY KEY AUTOINCREMENT, search_title TEXT, search_url TEXT);";
-    private static final String TRENDS_TABLE_CREATE = "CREATE TABLE " + TRENDS_TABLE_NAME + " (trend_id INTEGER PRIMARY KEY AUTOINCREMENT, trend_title TEXT, trend_url TEXT);";
-    private static final String AVATARS_TABEL_CREATE = "CREATE TABLE " + AVATARS_TABLE_NAME + " (user_id INTEGER PRIMARY KEY, avatar BLOB);";
+    private static final String ACCOUNTS_TABLE_CREATE = "CREATE TABLE " + ACCOUNTS_TABLE_NAME + " (account_id INTEGER PRIMARY KEY, screen_name TEXT NOT NULL, consumer_key TEXT NOT NULL, json_user_obj TEXT );";
+    private static final String STATUSES_TABLE_CREATE = "CREATE TABLE " + STATUSES_TABLE_NAME +" (status_id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL, account_id INTEGER NOT NULL, status_text TEXT NOT NULL, isFavorited INTEGER NOT NULL, isRetweet INTEGER NOT NULL, isRetweetedByMe INTEGER NOT NULL, create_date TEXT NOT NULL, json_status_obj TEXT NT NULL);";
+    private static final String USERS_TABLE_CREATE = "CREATE TABLE " + USERS_TABLE_NAME + " (user_id INTEGER PRIMARY KEY, account_id INTEGER NOT NULL, screen_name TEXT NOT NULL, isFollower INTEGER NOT NULL, isFriend  INTEGER NOT NULL, json_user_obj TEXT NOT NULL );";
+    private static final String SEARCHES_TABLE_CREATE = "CREATE TABLE " + SEARCHES_TABLE_NAME + " (search_id INTEGER PRIMARY KEY AUTOINCREMENT, account_id INTEGER NOT NULL, search_title TEXT, search_url TEXT);";
+    private static final String TRENDS_TABLE_CREATE = "CREATE TABLE " + TRENDS_TABLE_NAME + " (trend_id INTEGER PRIMARY KEY AUTOINCREMENT,  account_id INTEGER NOT NULL, trend_title TEXT, trend_url TEXT);";
+    private static final String AVATARS_TABEL_CREATE = "CREATE TABLE " + AVATARS_TABLE_NAME + " (user_id INTEGER PRIMARY KEY, account_id INTEGER NOT NULL, avatar BLOB);";
 
     private static final String ACCOUNTS_TABLE_DROP = "DROP TABLE " + ACCOUNTS_TABLE_NAME;
     private static final String STATUSES_TABLE_DROP = "DROP TABLE " + STATUSES_TABLE_NAME;
